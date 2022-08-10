@@ -57,6 +57,7 @@ func init() {
 		fmt.Println("获取随机图片库失败")
 		panic(queryRandomLenErr)
 	}
+	// 写个定时监听器
 	go refreshLen()
 
 }
