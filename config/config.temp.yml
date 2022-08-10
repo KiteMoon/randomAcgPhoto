@@ -1,0 +1,6 @@
+config:
+  database:
+    host:
+    username:
+    password:
+    dbname: 
