@@ -57,6 +57,8 @@ func init() {
 		fmt.Println("获取随机图片库失败")
 		panic(queryRandomLenErr)
 	}
+	go refreshLen()
+
 }
 
 func main() {
@@ -122,6 +124,5 @@ func main() {
 		}
 		context.Redirect(302, imgUrl+"/conversion.webp")
 	})
-	go refreshLen()
 	server.Run(":18848")
 }
