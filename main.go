@@ -125,5 +125,34 @@ func main() {
 		}
 		context.Redirect(302, imgUrl+"/conversion.webp")
 	})
+	server.GET("/random/query", func(context *gin.Context) {
+		token := context.Query("token")
+		if token == "" {
+			context.JSON(200, gin.H{
+				"code": "402",
+				"err":  "认证失败,如需使用，请前往https://shop.loli.fit购买服务",
+			})
+			return
+		}
+		apiAuthType, randomNum := Service.ApiAuth(DB, token, "random_pro")
+		if apiAuthType != true || randomNum < 1 {
+			context.JSON(200, gin.H{
+				"code": "403",
+				"err":  "认证失败,如需使用，请前往https://shop.loli.fit购买服务",
+			})
+			return
+		}
+		fmt.Println(randomLen)
+		imgUrl, serviceRondomErr := Service.QueryRandomImg(context, DB, randomLen)
+		if serviceRondomErr != nil {
+			fmt.Println("查询数据库失败，错误原因\n", serviceRondomErr)
+			context.JSON(200, gin.H{
+				"code": "500",
+				"err":  serviceRondomErr.Error(),
+			})
+			return
+		}
+		context.Redirect(302, imgUrl+"/conversion.webp")
+	})
 	server.Run(":18848")
 }
